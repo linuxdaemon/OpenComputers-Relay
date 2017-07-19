@@ -78,7 +78,7 @@ end
 
 function Connection:relayMsg(nick, msg)
   -- Add a zero-width space to avoid pinging users when they talk
-  local nick = nick[1] .. "\xE2\x80\x8B" .. nick:sub(2)
+  local nick = nick:sub(1, 1) .. "\xE2\x80\x8B" .. nick:sub(2)
   self:msg(self.chan, "<" .. nick .. "> " .. msg)
   self:send("PRIVMSG " .. self.chan .. " :<" .. nick .. "> " .. msg)
 end
