@@ -75,8 +75,8 @@ function Connection:handleData(data)
       local nick = line.prefix:match("[^!]+"):sub(2)
       local chan = line.params[1]
       local msg = line.params[2]
-      local cleanMsg = sanitize(msg)
-      if self.onMsg then self:onMsg(nick, chan, cleanMsg) end
+      local cleanMsg = format.ircToMinecraft(sanitize(msg))
+      self:onMsg(nick, chan, cleanMsg)
     end
   end
 end
