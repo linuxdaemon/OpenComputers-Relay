@@ -4,6 +4,14 @@ local component = require("component")
 
 local chat_box = component.getPrimary("chat_box")
 
+local function sanitize(msg)
+  local cleanMsg = msg
+  if cleanMsg:sub(1, 1) == ":" then
+    cleanMsg = cleanMsg:sub(2)
+  end
+  return cleanMsg
+end
+
 local Connection = class()
 
 function Connection:_init(config)
@@ -64,10 +72,11 @@ function Connection:handleData(data)
     elseif line.command == "004" then
       self:send("JOIN " .. self.chan)
     elseif line.command == "PRIVMSG" then
-      local nick = line.prefix:match("[^!]+")
+      local nick = line.prefix:match("[^!]+"):sub(2)
       local chan = line.params[1]
       local msg = line.params[2]
-      if self.onMsg then self:onMsg(nick, chan, msg) end
+      local cleanMsg = sanitize(msg)
+      if self.onMsg then self:onMsg(nick, chan, cleanMsg) end
     end
   end
 end
